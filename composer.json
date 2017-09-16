@@ -1,0 +1,53 @@
+{
+    "name": "korchasa/composer2docker",
+    "license": "MIT",
+	"authors": [
+		{
+			"name": "korchasa",
+			"email": "korchasa@gmail.com"
+		}
+	],
+    "require": {
+        "ext-json": "*",
+        "ext-ctype": "*",
+        "roave/security-advisories": "dev-master",
+        "twig/twig": "^2.4"
+    },
+	"require-dev": {
+        "php": ">=7.0",
+        "phpunit/phpunit": "^6.0",
+        "phpstan/phpstan": "*",
+        "sebastian/phpcpd": "*",
+        "squizlabs/php_codesniffer": "*"
+	},
+    "bin": [
+        "bin/composer2docker"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Composer2Docker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Composer2Docker\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "acceptance": [
+            "docker build -t composer2docker .",
+            "docker run --rm -v \"$(pwd)\":/work composer2docker > Dockerfile.2",
+            "git diff --exit-code Dockerfile Dockerfile.2"
+        ],
+        "check-loop": "while sleep 10; do clear && printf '\\e[3J' && composer run-script check ; done",
+        "check": [
+            "@unit",
+            "@analyze",
+            "@style"
+        ],
+        "style": "phpcs --standard=PSR2 src tests",
+        "analyze": "phpstan analyse -l5 src tests",
+        "unit": "phpunit",
+        "style-fix": "phpcbf --standard=PSR2 src tests"
+    }
+}
