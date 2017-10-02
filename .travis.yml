@@ -1,6 +1,9 @@
 language: php
 
-sudo: false
+sudo: required
+
+services:
+  - docker
 
 php:
   - '7.0'
@@ -14,3 +17,9 @@ before_install:
 install: composer update --prefer-dist $COMPOSER_FLAGS
 
 script: composer run-script check
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push korchasa/composer2docker;
+    fi
