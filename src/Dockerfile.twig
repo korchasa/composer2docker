@@ -19,11 +19,11 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     apk del .composer-deps && \    
     rm ./composer.phar && \
     echo ">>> Install php extensions" && \    
-    apk add --no-cache php7-json php7-ctype && \
+    apk add --no-cache {{ alpinePackages | join(' ') }} && \
     echo ">>> System cleanup" && \
     rm -rf .git .hg && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /work
 
-ENTRYPOINT ["/sbin/tini", "-g", "--", "/app/bin/composer2docker"]
+ENTRYPOINT ["/sbin/tini", "-g", "--", "/app/{{ binName }}"]

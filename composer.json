@@ -35,15 +35,16 @@
     },
     "scripts": {
         "acceptance": [
-            "docker build -t composer2docker .",
-            "docker run --rm -v \"$(pwd)\":/work composer2docker > Dockerfile.2",
-            "git diff --exit-code Dockerfile Dockerfile.2"
+            "docker build --pull -t korchasa/composer2docker .",
+            "docker run --rm -v \"$(pwd)\":/work composer2docker > /tmp/Dockerfile.composer2docker",
+            "git diff --exit-code --no-index -- Dockerfile /tmp/Dockerfile.composer2docker"            
         ],
         "check-loop": "while sleep 10; do clear && printf '\\e[3J' && composer run-script check ; done",
         "check": [
             "@unit",
             "@analyze",
-            "@style"
+            "@style-fix",
+            "@acceptance"
         ],
         "style": "phpcs --standard=PSR2 src tests",
         "analyze": "phpstan analyse -l5 src tests",

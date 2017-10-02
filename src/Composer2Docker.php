@@ -29,7 +29,7 @@ class Composer2Docker
     public function dockerfile()
     {
         $twig = new Twig_Environment(new Twig_Loader_Array([
-            'default' => file_get_contents(__DIR__.'/Dockerfile')
+            'default' => file_get_contents(__DIR__.'/Dockerfile.twig')
         ]));
         return $twig->render('default', [
             'composerPackage' => $this->package,
