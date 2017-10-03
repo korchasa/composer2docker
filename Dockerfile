@@ -15,10 +15,12 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php -- --quiet && \
     echo ">>> Run composer" && \
     php ./composer.phar install --ignore-platform-reqs --no-dev --optimize-autoloader && \
-    echo ">>> Remove composer" && \    
-    apk del .composer-deps && \    
+    echo ">>> Remove composer" && \
+    apk del .composer-deps && \
     rm ./composer.phar && \
-    echo ">>> Install php extensions" && \    
+    echo ">>> Remove tests from vendors" && \
+    find ./vendor/ -mindepth 2 -maxdepth 2 -type d -name "test*" -exec rm -fr "{}" + && \
+    echo ">>> Install php extensions" && \
     apk add --no-cache php7-json php7-ctype && \
     echo ">>> System cleanup" && \
     rm -rf .git .hg && \
@@ -26,4 +28,4 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
 
 WORKDIR /work
 
-ENTRYPOINT ["/sbin/tini", "-g", "--", "/app/bin/composer2docker"]
+CMD ["/sbin/tini", "-g", "--", "/app/bin/composer2docker"]
