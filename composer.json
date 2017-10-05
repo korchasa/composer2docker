@@ -44,8 +44,7 @@
         "check": [
             "@unit",
             "@analyze",
-            "@style-fix",
-            "@acceptance-quick"
+            "@style-fix"
         ],
         "style": "phpcs --standard=PSR2 src tests",
         "analyze": "phpstan analyse -l5 src tests",

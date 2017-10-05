@@ -13,7 +13,7 @@ before_install:
 
 install: composer update --prefer-dist $COMPOSER_FLAGS
 
-script: composer run-script check
+script: composer run-script check && composer run-script acceptance-full
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
