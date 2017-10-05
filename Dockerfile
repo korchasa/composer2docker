@@ -1,9 +1,6 @@
 FROM alpine:edge
 
-COPY ./src /app/src
-COPY ./bin /app/bin
-COPY ./composer.json /app/composer.json
-COPY ./composer.lock /app/composer.lock
+COPY . /app
 
 WORKDIR /app
 
@@ -21,11 +18,11 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
     echo ">>> Remove tests from vendors" && \
     find ./vendor/ -mindepth 2 -maxdepth 2 -type d -name "test*" -exec rm -fr "{}" + && \
     echo ">>> Install php extensions" && \
-    apk add --no-cache php7-json php7-ctype && \
+    apk add --no-cache php7-mbstring php7-json php7-ctype php7-xml php7-iconv && \
     echo ">>> System cleanup" && \
     rm -rf .git .hg && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /work
 
-CMD ["/sbin/tini", "-g", "--", "/app/bin/composer2docker"]
+ENTRYPOINT ["/sbin/tini", "-g", "--", "/app/bin/composer2docker"]

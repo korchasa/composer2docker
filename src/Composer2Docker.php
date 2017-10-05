@@ -10,6 +10,7 @@ class Composer2Docker
     protected $alpinePackages = [];
     protected $package;
     protected $binName;
+    protected $buildInPackages = ['php7-mbstring', 'php7-json', 'php7-ctype', 'php7-xml', 'php7-iconv'];
 
     public function composerLock($composerLockPath, $composerJsonPath)
     {
@@ -62,8 +63,11 @@ class Composer2Docker
                 }
             }
         }
-        $expectedExceptions = array_values(array_unique($expectedExceptions));
+        $expectedExceptions = array_values($expectedExceptions);
 
-        return array_values(array_map([$this, 'extensionToPackage'], $expectedExceptions));
+        return array_values(array_unique(array_merge(
+            $this->buildInPackages,
+            array_map([$this, 'extensionToPackage'], $expectedExceptions)
+        )));
     }
 }

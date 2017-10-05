@@ -1,9 +1,6 @@
 FROM alpine:edge
 
-COPY ./src /app/src
-COPY ./bin /app/bin
-COPY ./composer.json /app/composer.json
-COPY ./composer.lock /app/composer.lock
+COPY . /app
 
 WORKDIR /app
 
@@ -28,4 +25,4 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
 
 WORKDIR /work
 
-CMD ["/sbin/tini", "-g", "--", "/app/{{ binName }}"]
+ENTRYPOINT ["/sbin/tini", "-g", "--", "/app/{{ binName }}"]
