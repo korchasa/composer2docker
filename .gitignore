@@ -1,5 +1,5 @@
-/build/
 /vendor/
 .idea/
 .vscode/
 Dockerfile.2
+tests/build
