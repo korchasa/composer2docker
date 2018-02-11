@@ -35,16 +35,19 @@
     },
     "scripts": {
         "acceptance-quick": [
-            "docker build -t korchasa/composer2docker . > /dev/null",
+            "docker build -t korchasa/composer2docker .",
             "docker run --rm -v \"$(pwd)\":/work korchasa/composer2docker > /tmp/Dockerfile.composer2docker",
             "git diff --exit-code --no-index -- Dockerfile /tmp/Dockerfile.composer2docker"
         ],
         "acceptance-full": "tests/acceptance.sh",
         "check-loop": "while sleep 10; do clear && printf '\\e[3J' && composer run-script check ; done",
         "check": [
+            "set -ex",
             "@unit",
             "@analyze",
-            "@style-fix"
+            "@style-fix",
+            "@acceptance-quick",
+            "@acceptance-full"
         ],
         "style": "phpcs --standard=PSR2 src tests",
         "analyze": "phpstan analyse -l5 src tests",
