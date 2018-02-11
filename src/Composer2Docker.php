@@ -22,7 +22,7 @@ class Composer2Docker
         ));
         $this->package = $mainPackage['name'];
 
-        $this->binName = $mainPackage['bin'][0];
+        $this->binName = isset($mainPackage['bin']) ? $mainPackage['bin'][0] : null;
 
         return $this;
     }
